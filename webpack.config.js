@@ -8,7 +8,7 @@ module.exports = {
 	},
 
 	output:{
-		path: __dirname + "/html/js/",
+		path: __dirname + "/web/js/",
 		filename: "[name].js"
 	},
 
@@ -36,7 +36,7 @@ module.exports = {
 	devServer: {
 		host: "0.0.0.0",
 		port: 8080,
-		publicPath: "/html/js/",
+		publicPath: "/web/js/",
 		disableHostCheck: true
 	}
 }

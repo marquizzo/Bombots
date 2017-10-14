@@ -37,6 +37,7 @@ export default class SceneControl{
 		let manifesto: Array<IRequest> = [
 			// Bot geometry
 			{name: "bot", type: "mesh", ext: "json"},
+			{name: "skybox", type: "cubetexture", ext: "png"}
 		];
 
 		let path = "";

@@ -1,5 +1,6 @@
 import DefaultView from "./DefaultView";
 import Monoc from "../../utils/cameras/camera";
+import Senor from "../characters/Senor";
 import {ICargo} from "../../utils/preloader";
 import {CamOptions} from "../../utils/cameras/interfaces";
 
@@ -9,8 +10,10 @@ export default class GameView extends DefaultView{
 	assets: ICargo;
 
 	// Game objects
-	bot3D: THREE.Object3D;
-	bomb3D: THREE.Object3D;
+	botAsset: THREE.Object3D;
+	bombAsset: THREE.Object3D;
+
+	client: Senor;
 
 	constructor(_assets: ICargo){
 		super();
@@ -26,22 +29,22 @@ export default class GameView extends DefaultView{
 		};
 
 		this.cam = new Monoc(camOptions);
-		this.bot3D = (<THREE.Scene>this.assets.bot).getObjectByName("Bot");
-		this.bomb3D = (<THREE.Scene>this.assets.bot).getObjectByName("Bomb");
+		this.botAsset = (<THREE.Scene>this.assets.bot).getObjectByName("Bot");
+		this.bombAsset = (<THREE.Scene>this.assets.bot).getObjectByName("Bomb");
 
 		this.addLights();
 		this.buildStage();
-		let botPos = new THREE.Vector3();
-		for(var i = 0; i < 10; i++){
-			botPos.set(THREE.Math.randFloat(-5, 5), 0, THREE.Math.randFloat(-5, 5));
-			this.newBot(botPos);
-		}
+
+		this.client = new Senor(this.botAsset);
+		this.scene.add(this.client.getBotObj());
 	}
 
 	private addLights(): void{
-		let light = new THREE.PointLight(0xffffff, 1.0);
+		let light = new THREE.PointLight(0xffeecc, 1.0);
 		light.position.set(-2, 4, 0);
 		this.scene.add(light);
+
+		this.scene.background = this.assets.skybox;
 	}
 
 	private buildStage():void{
@@ -50,14 +53,6 @@ export default class GameView extends DefaultView{
 		let mat = new THREE.MeshPhongMaterial({color: 0xffffff});
 		let mesh = new THREE.Mesh(plane, mat);
 		this.scene.add(mesh);
-	}
-
-	private newBot(_pos: THREE.Vector3):void{
-		let newBot = new THREE.Object3D();
-		newBot.copy(this.bot3D, true);
-		newBot.position.copy(_pos);
-		newBot.rotateZ(Math.PI * Math.random());
-		this.scene.add(newBot);
 	}
 
 	/////////////////////////////////////// HAMMER EVENTS ///////////////////////////////////////
